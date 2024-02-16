@@ -1,0 +1,53 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Interfaces\Services\{{ class }}Interface;
+use App\Services\Base\BaseService;
+use {{ namespacedModel }};
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+
+class {{ class }} extends BaseService implements {{ class }}Interface
+{
+    /**
+     * The constructor service
+     */
+    public function __construct(private {{ model }}RepositoryInterface $repository)
+    {
+        // 
+    }
+
+    /**
+     * Datatable service
+     */
+    public function datatable(Request $request): LengthAwarePaginator
+    {
+        return $this->repository->datatable($request);
+    }
+
+    /**
+     * Create service
+     */
+    public function create(FormRequest $request): void
+    {
+        $this->repository->create($request->validated());
+    }
+
+    /**
+     * Update service
+     */
+    public function update(FormRequest $request, {{ model }} ${{ model }}): void
+    {
+        $this->repository->update($request->validated(), ${{ model }}->id);
+    }
+
+    /**
+     * Delete service
+     */
+    public function delete({{ model }} ${{ model }}): void
+    {
+        $this->repository->delete(${{ model }}->id);
+    }
+}

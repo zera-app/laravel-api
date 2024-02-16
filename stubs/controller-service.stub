@@ -1,0 +1,121 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ namespacedModel }};
+use {{ rootNamespace }}Http\Controllers\Controller;
+use {{ namespacedRequests }}
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
+class {{ class }} extends Controller
+{
+    /**
+     * Instantiate a new Controllers instance.
+     */
+    public function __construct()
+    {
+        $this->title = '';
+        $this->description = '';
+        $this->routeNamePrefix = '';
+        $this->viewNamePrefix = '';
+        $this->permissionName = '';
+        $this->policyModel = {{ namespacedModel }}::class;
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        return view("$this->viewNamePrefix.index", $this->pack());
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        return view("$this->viewNamePrefix.create", $this->pack());
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store({{ storeRequest }} $request)
+    {
+       
+        DB::beginTransaction();
+
+        try {
+            // service...
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error($th->getMessage());
+
+            return redirect()->back()->with('error', $this->responseMessageCrud(false, 'create', null, $th->getMessage()));
+        }
+
+        DB::commit();
+
+        return redirect()->route("$this->routeNamePrefix.index")->with('success', $this->responseMessageCrud(true, 'create'));
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show({{ model }} ${{ modelVariable }})
+    {
+        return view("$this->viewNamePrefix.show", $this->pack());
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit({{ model }} ${{ modelVariable }})
+    {
+        return view("$this->viewNamePrefix.edit", $this->pack());
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update({{ updateRequest }} $request, {{ model }} ${{ modelVariable }})
+    {
+        DB::beginTransaction();
+
+        try {
+            // service...
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error($th->getMessage());
+
+            return redirect()->back()->with('error', $this->responseMessageCrud(false, 'update', null, $th->getMessage()));
+        }
+
+        DB::commit();
+
+        return redirect()->route("$this->routeNamePrefix.index")->with('success', $this->responseMessageCrud(true, 'update'));   
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy({{ model }} ${{ modelVariable }})
+    {
+        DB::beginTransaction();
+
+        try {
+            // service ...
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error($th->getMessage());
+
+            return redirect()->back()->with($this->responseMessageCrud(false, 'delete', null, $th->getMessage()));
+        }
+
+        DB::commit();
+
+        return redirect()->route("$this->routeNamePrefix.index")->with($this->responseMessageCrud(true, 'delete'));
+    }
+}

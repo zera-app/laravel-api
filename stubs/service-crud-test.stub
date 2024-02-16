@@ -1,0 +1,119 @@
+<?php
+
+use App\Http\Requests\Admin\Master\{{model}}\Store{{model}}Request;
+use App\Interfaces\Services\{{model}}ServiceInterface;
+use App\Models\{{model}};
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+
+it('can get datatable', function () {
+    
+    $fake = {{model}}::factory()->count(10)->create();
+    $request = new Request();
+
+    $service = app({{model}}ServiceInterface::class);
+    $result = $service->datatable($request);
+
+    expect($result)->toBeInstanceOf(LengthAwarePaginator::class);
+    expect($result)->toBeCount(10);
+});
+
+it('can get datatable with search', function () {
+    $fake = {{model}}::factory()->count(10)->create();
+    $fake = {{model}}::factory()->create([
+        'name' => 'TEST DATA',
+    ]);
+    $request = new Request([
+        'search' => 'TEST DATA',
+    ]);
+
+    $service = app({{model}}ServiceInterface::class);
+
+    $result = $service->datatable($request);
+
+    expect($result)->toBeInstanceOf(LengthAwarePaginator::class);
+    expect($result)->toBeCount(1);
+});
+
+it('can get datatable with ordering', function () {
+    
+    $fake = {{model}}::factory()->count(10)->create();
+    $request = new Request([
+        'order' => '-name',
+    ]);
+
+    $service = app({{model}}ServiceInterface::class);
+    $result = $service->datatable($request);
+
+    expect($result)->toBeInstanceOf(LengthAwarePaginator::class);
+    expect($result)->toBeCount(10);
+});
+
+it('can get datatable with per page', function () {
+    
+    $fake = {{model}}::factory()->count(10)->create();
+    $request = new Request([
+        'per_page' => 5,
+    ]);
+
+    $service = app({{model}}ServiceInterface::class);
+    $result = $service->datatable($request);
+
+    expect($result)->toBeInstanceOf(LengthAwarePaginator::class);
+    expect($result)->toBeCount(5);
+});
+
+it('can create a {{model}}', function () {
+
+    $fake = {{model}}::factory()->make()->toArray();
+
+    $request = new FormRequest();
+    $request = $request->setValidator(Validator::make(
+        $fake,
+        (new Store{{model}}Request())->rules()
+    ));
+
+    $service = app({{model}}ServiceInterface::class);
+
+    $result = $service->create($request);
+
+    $this->assertDatabaseHas('tableName', [
+        'name' => $fake['name'],
+    ]);
+});
+
+it('can update a {{model}}', function () {
+    ${{model}} = {{model}}::factory()->create();
+
+    $fake = {{model}}::factory()->make()->toArray();
+
+    $request = new FormRequest();
+    $request = $request->setValidator(Validator::make(
+        $fake,
+        (new Store{{model}}Request())->rules()
+    ));
+
+    $service = app({{model}}ServiceInterface::class);
+
+    $result = $service->update($request, ${{model}});
+
+    $this->assertDatabaseHas('tableName', [
+        'name' => $fake['name'],
+    ]);
+});
+
+it('can delete a {{model}}', function () {
+    ${{model}} = {{model}}::factory()->create();
+
+    $service = app({{model}}ServiceInterface::class);
+
+    $result = $service->delete(${{model}});
+
+    expect({{model}}::find(${{model}}->id))->toBeNull();
+
+    $this->assertDatabaseMissing('tableName', [
+        'name' => ${{model}}->name,
+    ]);
+});

@@ -1,0 +1,69 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Interfaces\Repositories\{{ class }}Interface;
+use App\Repositories\Base\BaseRepository;
+use {{ namespacedModel }};
+use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+
+class {{ class }} extends BaseRepository implements {{ class }}Interface
+{
+    /**
+     * Instantiate a new {{ class }} instance.
+     */
+    public function __construct()
+    {
+        $this->setAllowableSearch([
+            //
+        ]);
+
+        $this->setAllowableSort([
+            //
+        ]);
+    }
+
+    /**
+     * datatable repository
+     */
+    public function datatable(Request $request): LengthAwarePaginator
+    {
+        return {{ model }}::query()
+            ->when($request->search, function ($query, $search) {
+                $this->getAllowableSearchQuery($query, $search);
+            })
+            ->orderBy($this->getSortColumn(), $this->getSortDirection())
+            ->paginate($request->per_page ?? config('app.default_paginator'));
+    }
+
+    /**
+     * Create repository
+     */
+    public function create(array $data): {{ model }}
+    {
+        $data =  {{ model }}::create($data);
+
+        return $data;
+    }
+
+    /**
+     * Update repository
+     */
+    public function update(array $data, string $id): {{ model }}
+    {
+        $model = {{ model }}::findOrFail($id);
+        $model->update($data);
+
+        return $model;
+    }
+
+    /**
+     * Delete repository
+     */
+    public function delete(string $id): void
+    {
+        $data = {{ model }}::findOrFail($id);
+        $data->delete();
+    }
+}

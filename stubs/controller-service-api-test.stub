@@ -1,0 +1,127 @@
+<?php
+
+use App\Models\Role;
+use App\Models\{{model}};
+use App\Models\User;
+
+test('user with role superadmin can access {{model}} index', function () {
+    Role::factory()->create(['name' => 'superadmin']);
+
+    $user = User::factory()->create();
+    $user->assignRole('superadmin');
+
+    $response = $this
+        ->actingAs($user)
+        ->getJson(route('{{route}}.index'));
+
+    $response->assertOk();
+    $response->assertJsonStructure([
+        'data'
+    ]);
+});
+
+test('user with role superadmin can access {{model}} store', function () {
+    Role::factory()->create(['name' => 'superadmin']);
+
+    $user = User::factory()->create();
+    $user->assignRole('superadmin');
+
+    $data = {{model}}::factory()->make()->toArray();
+
+    $response = $this
+        ->actingAs($user)
+        ->postJson(route('{{route}}.store'), $data);
+
+    $response->assertCreated();
+    $response->assertJsonStructure([
+        'message'
+    ]);
+
+    $this->assertDatabaseHas('{{table}}', [
+        'name' => $data['name'],
+    ]);
+});
+
+test('user {{model}} store validation', function () {
+    Role::factory()->create(['name' => 'superadmin']);
+
+    $user = User::factory()->create();
+    $user->assignRole('superadmin');
+
+    $data = {{model}}::factory()->make()->toArray();
+
+    $response = $this
+        ->actingAs($user)
+        ->postJson(route('{{route}}.store'));
+
+    $response->assertStatus(422);
+    $response->assertJsonStructure([
+        'message',
+        'errors' => []
+    ]);
+});
+
+test('user with role superadmin can access {{model}} update', function () {
+    Role::factory()->create(['name' => 'superadmin']);
+
+    $user = User::factory()->create();
+    $user->assignRole('superadmin');
+
+    ${{model}} = {{model}}::factory()->create();
+    $data = {{model}}::factory()->make()->toArray();
+
+    $response = $this
+        ->actingAs($user)
+        ->putJson(route('{{route}}.update', ${{model}}->id), $data);
+
+    $response->assertOk();
+    $response->assertJsonStructure([
+        'message'
+    ]);
+
+    $this->assertDatabaseHas('{{table}}', [
+        'name' => $data['name'],
+    ]);
+});
+
+test('user {{model}} update validation', function () {
+    Role::factory()->create(['name' => 'superadmin']);
+
+    $user = User::factory()->create();
+    $user->assignRole('superadmin');
+
+    ${{model}} = {{model}}::factory()->create();
+    $data = {{model}}::factory()->make()->toArray();
+
+    $response = $this
+        ->actingAs($user)
+        ->putJson(route('{{route}}.update', ${{model}}->id), []);
+
+    $response->assertStatus(422);
+    $response->assertJsonStructure([
+        'message',
+        'errors' => []
+    ]);
+});
+
+test('user with role superadmin can access {{model}} delete', function () {
+    Role::factory()->create(['name' => 'superadmin']);
+
+    $user = User::factory()->create();
+    $user->assignRole('superadmin');
+
+    ${{model}} = {{model}}::factory()->create();
+
+    $response = $this
+        ->actingAs($user)
+        ->deleteJson(route('{{route}}.destroy', ${{model}}->id));
+
+    $response->assertOk();
+    $response->assertJsonStructure([
+        'message'
+    ]);
+
+    $this->assertDatabaseMissing('{{table}}', [
+        'id' => ${{model}}->id,
+    ]);
+});

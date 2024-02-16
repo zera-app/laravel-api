@@ -1,0 +1,32 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Interfaces\Base\BaseServiceInterface;
+use {{ namespacedModel }};
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+
+interface {{ class }} extends BaseServiceInterface
+{
+    /**
+     * Datatable service
+     */
+    public function datatable(Request $request): LengthAwarePaginator;
+
+    /**
+     * Create service
+     */
+    public function create(FormRequest $request): void;
+
+    /**
+     * Update service
+     */
+    public function update(FormRequest $request, {{ model }} ${{ model }}): void;
+
+    /**
+     * Delete service
+     */
+    public function delete({{ model }} ${{ model }}): void;
+}

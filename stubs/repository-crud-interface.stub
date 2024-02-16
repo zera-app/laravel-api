@@ -1,0 +1,31 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Interfaces\Base\BaseRepositoryInterface;
+use {{ namespacedModel }};
+use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+
+interface {{ class }} extends BaseRepositoryInterface
+{
+    /**
+     * Datatable repository
+     */
+    public function datatable(Request $request): LengthAwarePaginator;
+
+    /**
+     * Create repository
+     */
+    public function create(array $data): {{ model }};
+
+    /**
+     * Update repository
+     */
+    public function update(array $data, string $id): {{ model }};
+
+    /**
+     * Delete repository
+     */
+    public function delete(string $id): void;
+}
