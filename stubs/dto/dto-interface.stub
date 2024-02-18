@@ -1,0 +1,12 @@
+<?php
+
+namespace {{ namespace }};
+use App\Interfaces\Base\BaseObjectInterface;
+
+interface {{ class }} extends BaseObjectInterface
+{
+    /**
+     *  Access the {{ class }} as an array.
+     */
+    public function toArray(): array;
+}

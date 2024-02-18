@@ -4,28 +4,34 @@ namespace {{ namespace }};
 
 use App\Interfaces\Base\BaseRepositoryInterface;
 use {{ namespacedModel }};
+use App\DataTransferObjects\{{ model }}Object;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 interface {{ class }} extends BaseRepositoryInterface
 {
     /**
-     * Datatable repository
+     * Datatable query for {{ model }}.
      */
     public function datatable(Request $request): LengthAwarePaginator;
 
     /**
-     * Create repository
+     * Create a new {{ model }}.
      */
-    public function create(array $data): {{ model }};
+    public function create({{ model }}Object): {{ model }};
+    
+    /**
+     * Find a {{ model }} by using id.
+     */
+    public function show(string $id): {{ model }};
 
     /**
-     * Update repository
+     * Update a {{ model }}.
      */
-    public function update(array $data, string $id): {{ model }};
+    public function update({{ model }}Object, string $id): {{ model }};
 
     /**
-     * Delete repository
+     * Delete a {{ model }}.
      */
     public function delete(string $id): void;
 }

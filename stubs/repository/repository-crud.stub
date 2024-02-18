@@ -2,6 +2,7 @@
 
 namespace {{ namespace }};
 
+use App\DataTransferObjects\{{ model }}Object;
 use App\Interfaces\Repositories\{{ class }}Interface;
 use App\Repositories\Base\BaseRepository;
 use {{ namespacedModel }};
@@ -25,7 +26,7 @@ class {{ class }} extends BaseRepository implements {{ class }}Interface
     }
 
     /**
-     * datatable repository
+     * Datatable query for {{ model }}.
      */
     public function datatable(Request $request): LengthAwarePaginator
     {
@@ -38,28 +39,38 @@ class {{ class }} extends BaseRepository implements {{ class }}Interface
     }
 
     /**
-     * Create repository
+     * Create a new {{ model }}.
      */
-    public function create(array $data): {{ model }}
+    public function create({{ model }}Object $data): {{ model }}
     {
-        $data =  {{ model }}::create($data);
+        $data =  {{ model }}::create($data->toArray());
 
         return $data;
     }
 
     /**
-     * Update repository
+     * Find a {{ model }} by id.
      */
-    public function update(array $data, string $id): {{ model }}
+    public function show(string $id): {{ model }}
+    {
+        $data =  {{ model }}::with($this->getAllowableFilter())->findOrFail($id);
+
+        return $data;
+    }
+
+    /**
+     * Update a {{ model }},
+     */
+    public function update({{ model }}Object $data, string $id): {{ model }}
     {
         $model = {{ model }}::findOrFail($id);
-        $model->update($data);
+        $model->update($data->toArray());
 
         return $model;
     }
 
     /**
-     * Delete repository
+     * Delete a {{ model }},
      */
     public function delete(string $id): void
     {

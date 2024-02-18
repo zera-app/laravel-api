@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 
 it('can get datatable', function () {
     
-    $fake = {{model}}::factory()->count(10)->create();
+    {{model}}::factory()->count(10)->create();
     $request = new Request();
 
     $service = app({{model}}ServiceInterface::class);
@@ -21,8 +21,8 @@ it('can get datatable', function () {
 });
 
 it('can get datatable with search', function () {
-    $fake = {{model}}::factory()->count(10)->create();
-    $fake = {{model}}::factory()->create([
+    {{model}}::factory()->count(10)->create();
+    {{model}}::factory()->create([
         'name' => 'TEST DATA',
     ]);
     $request = new Request([
@@ -39,7 +39,7 @@ it('can get datatable with search', function () {
 
 it('can get datatable with ordering', function () {
     
-    $fake = {{model}}::factory()->count(10)->create();
+    {{model}}::factory()->count(10)->create();
     $request = new Request([
         'order' => '-name',
     ]);
@@ -53,7 +53,7 @@ it('can get datatable with ordering', function () {
 
 it('can get datatable with per page', function () {
     
-    $fake = {{model}}::factory()->count(10)->create();
+    {{model}}::factory()->count(10)->create();
     $request = new Request([
         'per_page' => 5,
     ]);

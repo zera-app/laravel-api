@@ -1,0 +1,25 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\DataTransferObjects\Base\BaseObject;
+use App\Interfaces\DataTransferObjects\{{ class }}Interface;
+
+class {{ class }} extends BaseObject implements {{ class }}Interface
+{
+    /**
+     * Instantiate a new {{ class }} instance.
+     */
+    public function __construct()
+    {
+        //
+    }
+
+    /**
+     *  Access the UserObject as an array.
+     */
+    public function toArray(): array
+    {
+        return [];
+    }
+}

@@ -1,33 +1,27 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\File\Repository;
 
 use App\Supports\Str;
-use Illuminate\Console\Command;
 use Illuminate\Console\GeneratorCommand;
+use InvalidArgumentException;
 use Symfony\Component\Console\Input\InputOption;
 
-class MakeRepositoryTestCommand extends GeneratorCommand
+class MakeRepositoryCrudInterface extends GeneratorCommand
 {
     /**
-     * The name of your command.
-     * This is how your Artisan's command shall be invoked.
-     */
-    protected $name = 'app:make-repository-test-command';
-
-    /**
-     * A short description of the command's purpose.
-     * You can see this working by executing
-     * php artisan list
-     */
-    protected $description = 'Create a new repository test';
-
-    /**
-     * The type of class being generated.
+     * The name and signature of the console command.
      *
      * @var string
      */
-    protected $type = 'RepositoryTest';
+    protected $name = 'app:make-repository-crud-interface';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Make Repository CRUD interface.';
 
     /**
      * Build the class with the given name.
@@ -39,11 +33,11 @@ class MakeRepositoryTestCommand extends GeneratorCommand
      */
     protected function buildClass($name)
     {
+
         $stub = $this->replaceModel(parent::buildClass($name), $this->option('model'));
 
         return $stub;
     }
-
 
     /**
      * Replace the model for the given stub.
@@ -68,8 +62,6 @@ class MakeRepositoryTestCommand extends GeneratorCommand
 
         $dummyModel = Str::camel($model) === 'user' ? 'model' : $model;
 
-        $tableName = Str::plural(Str::snake($model));
-
         $replace = [
             'NamespacedDummyModel' => $namespacedModel,
             '{{ namespacedModel }}' => $namespacedModel,
@@ -84,9 +76,6 @@ class MakeRepositoryTestCommand extends GeneratorCommand
             '{{ user }}' => $dummyUser,
             '{{user}}' => $dummyUser,
             '$user' => '$' . Str::camel($dummyUser),
-            'DummyTable' => $tableName,
-            '{{ table }}' => $tableName,
-            '{{table}}' => $tableName,
         ];
 
         $stub = str_replace(
@@ -106,26 +95,20 @@ class MakeRepositoryTestCommand extends GeneratorCommand
     }
 
     /**
-     * Get the stub file for the generator.
+     * Get the fully-qualified model class name.
      *
+     * @param  string  $model
      * @return string
-     */
-    protected function getStub()
-    {
-        return base_path('stubs/repository-crud-test.stub');
-    }
-
-    /**
-     * Get the destination class path.
      *
-     * @param  string  $name
-     * @return string
+     * @throws \InvalidArgumentException
      */
-    protected function getPath($name)
+    protected function parseModel($model)
     {
-        $name = Str::replaceFirst($this->rootNamespace(), '', $name);
+        if (preg_match('([^A-Za-z0-9_/\\\\])', $model)) {
+            throw new InvalidArgumentException('Model name contains invalid characters.');
+        }
 
-        return base_path('tests') . str_replace('\\', '/', $name) . '.php';
+        return $this->qualifyModel($model);
     }
 
     /**
@@ -136,27 +119,28 @@ class MakeRepositoryTestCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . "\Unit\Repositories";
+        return $rootNamespace . '\Interfaces\Repositories';
     }
 
     /**
-     * Get the root namespace for the class.
+     * Get the stub file for the generator.
      *
      * @return string
      */
-    protected function rootNamespace()
+    protected function getStub()
     {
-        return 'Tests';
+        return base_path('stubs/repository/repository-interface.stub');
     }
 
     /**
      * Get the console command options.
+     *
+     * @return array
      */
     protected function getOptions()
     {
         return [
-            ['model', '-m', InputOption::VALUE_REQUIRED, 'The model field'],
-            ['repository', '-r', InputOption::VALUE_OPTIONAL, 'The repository class'],
+            ['model', null, InputOption::VALUE_REQUIRED, 'Specify the model that the repository interface.'],
         ];
     }
 }

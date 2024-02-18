@@ -1,32 +1,71 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\File\Repository;
 
 use App\Supports\Str;
 use Illuminate\Console\GeneratorCommand;
+use InvalidArgumentException;
 use Symfony\Component\Console\Input\InputOption;
 
-class MakeCrudServiceInterfaceCommand extends GeneratorCommand
+class MakeRepositoryCrudTest extends GeneratorCommand
 {
     /**
-     * The name of your command.
-     * This is how your Artisan's command shall be invoked.
-     */
-    protected $name = 'app:make-crud-service-interface-command';
-
-    /**
-     * A short description of the command's purpose.
-     * You can see this working by executing
-     * php artisan list
-     */
-    protected $description = 'Make a crud service interface';
-
-    /**
-     * The type of class being generated.
+     * The name and signature of the console command.
      *
      * @var string
      */
-    protected $type = 'RepositoryInterface';
+    protected $name = 'app:make-repository-crud-test';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Make Repository CRUD Test class.';
+
+    /**
+     * Get the destination class path.
+     *
+     * @param  string  $name
+     * @return string
+     */
+    protected function getPath($name)
+    {
+        $name = Str::replaceFirst($this->rootNamespace(), '', $name);
+
+        return base_path('tests') . str_replace('\\', '/', $name) . '.php';
+    }
+
+    /**
+     * Get the default namespace for the class.
+     *
+     * @param  string  $rootNamespace
+     * @return string
+     */
+    protected function getDefaultNamespace($rootNamespace)
+    {
+        return $rootNamespace . "\Unit\Repositories";
+    }
+
+    /**
+     * Get the root namespace for the class.
+     *
+     * @return string
+     */
+    protected function rootNamespace()
+    {
+        return 'Tests';
+    }
+
+    /**
+     * Get the stub file for the generator.
+     *
+     * @return string
+     */
+    protected function getStub()
+    {
+        return base_path('stubs/repository/repository-crud-test.stub');
+    }
 
     /**
      * Build the class with the given name.
@@ -38,6 +77,7 @@ class MakeCrudServiceInterfaceCommand extends GeneratorCommand
      */
     protected function buildClass($name)
     {
+
         $stub = $this->replaceModel(parent::buildClass($name), $this->option('model'));
 
         return $stub;
@@ -99,33 +139,31 @@ class MakeCrudServiceInterfaceCommand extends GeneratorCommand
     }
 
     /**
-     * Get the stub file for the generator.
+     * Get the fully-qualified model class name.
      *
+     * @param  string  $model
      * @return string
+     *
+     * @throws \InvalidArgumentException
      */
-    protected function getStub()
+    protected function parseModel($model)
     {
-        return base_path('stubs/service-crud-interface.stub');
-    }
+        if (preg_match('([^A-Za-z0-9_/\\\\])', $model)) {
+            throw new InvalidArgumentException('Model name contains invalid characters.');
+        }
 
-    /**
-     * Get the default namespace for the class.
-     *
-     * @param  string  $rootNamespace
-     * @return string
-     */
-    protected function getDefaultNamespace($rootNamespace)
-    {
-        return $rootNamespace . '\Interfaces\Services';
+        return $this->qualifyModel($model);
     }
 
     /**
      * Get the console command options.
+     *
+     * @return array
      */
     protected function getOptions()
     {
         return [
-            ['model', '-m', InputOption::VALUE_OPTIONAL, 'The model field'],
+            ['model', null, InputOption::VALUE_REQUIRED, 'Specify the model that the own the repository test.'],
         ];
     }
 }
