@@ -1,0 +1,6 @@
+<?php
+
+it('It should return true.', function () {
+    expect(true)->toBe(true);
+});
+

@@ -12,7 +12,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 class {{ class }} extends BaseService implements {{ class }}Interface
 {
     /**
-     * The constructor service
+     * The constructor function for {{ class }}.
      */
     public function __construct(private {{ model }}RepositoryInterface $repository)
     {
@@ -20,34 +20,44 @@ class {{ class }} extends BaseService implements {{ class }}Interface
     }
 
     /**
-     * Datatable service
+     * Get data {{ model }} for datatable.
      */
     public function datatable(Request $request): LengthAwarePaginator
     {
-        return $this->repository->datatable($request);
+        return $this
+            ->repository
+            ->datatable($request);
     }
 
     /**
-     * Create service
+     * Create a new data {{ model }}
      */
     public function create(FormRequest $request): void
     {
-        $this->repository->create($request->validated());
+         // $this->repository->create($request->validated());
     }
 
     /**
-     * Update service
+     * Find a single data {{ model }} from id.
+     */
+    public function show(string $id): {{ model }}
+    {
+         // return $this->repository->show($id);
+    }
+
+    /**
+     * Update a data {{ model }}.
      */
     public function update(FormRequest $request, {{ model }} ${{ model }}): void
     {
-        $this->repository->update($request->validated(), ${{ model }}->id);
+        // $this->repository->update($request->validated(), ${{ model }}->id);
     }
 
     /**
-     * Delete service
+     * Delete a data {{ model }}.
      */
     public function delete({{ model }} ${{ model }}): void
     {
-        $this->repository->delete(${{ model }}->id);
+         // $this->repository->delete(${{ model }}->id);
     }
 }

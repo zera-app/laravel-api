@@ -11,22 +11,27 @@ use Illuminate\Pagination\LengthAwarePaginator;
 interface {{ class }} extends BaseServiceInterface
 {
     /**
-     * Datatable service
+     * Get data {{ model }} for datatable.
      */
     public function datatable(Request $request): LengthAwarePaginator;
 
     /**
-     * Create service
+     * Create a new data {{ model }}.
      */
     public function create(FormRequest $request): void;
+    
+    /**
+     * Find a single data {{ model }} from id.
+     */
+    public function show($id $id): {{ model }};
 
     /**
-     * Update service
+     * Update a data {{ model }}.
      */
     public function update(FormRequest $request, {{ model }} ${{ model }}): void;
 
     /**
-     * Delete service
+     * Delete a data {{ model }}.
      */
     public function delete({{ model }} ${{ model }}): void;
 }
