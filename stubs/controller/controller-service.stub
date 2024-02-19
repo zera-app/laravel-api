@@ -20,7 +20,8 @@ class {{ class }} extends Controller
         $this->routeNamePrefix = '';
         $this->viewNamePrefix = '';
         $this->permissionName = '';
-        $this->policyModel = {{ namespacedModel }}::class;
+        $this->policyModel = {{ model }}::class;
+        $this->authorizeResource({{ model }}::class);
     }
 
     /**
@@ -42,12 +43,12 @@ class {{ class }} extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store({{ storeRequest }} $request)
+    public function store({{ storeRequest }} $request, {{ model }}ServiceInterface $service)
     {
         DB::beginTransaction();
 
         try {
-            // service...
+            $service->create($request);
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error($th->getMessage());
@@ -63,28 +64,36 @@ class {{ class }} extends Controller
     /**
      * Display the specified resource.
      */
-    public function show({{ model }} ${{ modelVariable }})
+    public function show({{ model }} ${{ modelVariable }}, {{ model }}ServiceInterface $service)
     {
-        return view("$this->viewNamePrefix.show", $this->pack());
+        $data = $service->show(${{ modelVariable }});
+
+        return view("$this->viewNamePrefix.show", $this->pack([
+            'model' => $data,
+        ]));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit({{ model }} ${{ modelVariable }})
+    public function edit({{ model }} ${{ modelVariable }}, {{ model }}ServiceInterface $service)
     {
-        return view("$this->viewNamePrefix.edit", $this->pack());
+        $data = $service->show(${{ modelVariable }});
+
+        return view("$this->viewNamePrefix.edit", $this->pack([
+            'model' => $data,
+        ]));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update({{ updateRequest }} $request, {{ model }} ${{ modelVariable }})
+    public function update({{ updateRequest }} $request, {{ model }} ${{ modelVariable }}, {{ model }}ServiceInterface $service)
     {
         DB::beginTransaction();
 
         try {
-            // service...
+            $service->update($request);
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error($th->getMessage());
@@ -100,12 +109,12 @@ class {{ class }} extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy({{ model }} ${{ modelVariable }})
+    public function destroy({{ model }} ${{ modelVariable }}, {{ model }}ServiceInterface $service)
     {
         DB::beginTransaction();
 
         try {
-            // service ...
+            $data = $service->delete(${{ modelVariable }});
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error($th->getMessage());

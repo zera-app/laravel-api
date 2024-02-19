@@ -118,7 +118,7 @@ class MakeServiceCrudInterface extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '\Interfaces\Services';
+        return $rootNamespace . '\Interfaces\Services\Controllers';
     }
 
     /**

@@ -8,7 +8,7 @@ use {{ namespacedRequests }}
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Interfaces\Services\{{ model }}Service;
+use App\Interfaces\Services\Controllers\{{ model }}ServiceInterface;
 
 class {{ class }} extends Controller
 {
@@ -24,15 +24,15 @@ class {{ class }} extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, {{ model }}Service $service)
+    public function index(Request $request, {{ model }}ServiceInterface $service)
     {
-        return $this->responseJson($service->datatable(request()))
+        return $this->responseJson($service->datatable($request));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store({{ storeRequest }} $request, {{ model }}Service $service)
+    public function store({{ storeRequest }} $request, {{ model }}ServiceInterface $service)
     {   
         DB::beginTransaction();
 
@@ -53,9 +53,9 @@ class {{ class }} extends Controller
     /**
      * Display the specified resource.
      */
-    public function show({{ model }} ${{ modelVariable }}, {{ model }}Service $service)
+    public function show({{ model }} ${{ modelVariable }}, {{ model }}ServiceInterface $service)
     {
-        $data = $service->show($model);
+        $data = $service->show(${{ modelVariable }});
 
         return $this->responseJsonData($data);
     }
@@ -63,12 +63,12 @@ class {{ class }} extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update({{ updateRequest }} $request, {{ model }} ${{ modelVariable }}, {{ model }}Service $service)
+    public function update({{ updateRequest }} $request, {{ model }} ${{ modelVariable }}, {{ model }}ServiceInterface $service)
     {   
         DB::beginTransaction();
 
         try {
-            $service->update($model ${{ modelVariable }});
+            $service->update($request, ${{ modelVariable }});
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error($th->getMessage());
@@ -84,12 +84,12 @@ class {{ class }} extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy({{ model }} ${{ modelVariable }}, {{ model }}Service $service)
+    public function destroy({{ model }} ${{ modelVariable }}, {{ model }}ServiceInterface $service)
     {
         DB::beginTransaction();
 
         try {
-            $service->delete(${{ modelVariable }})
+            $service->delete(${{ modelVariable }});
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error($th->getMessage());
