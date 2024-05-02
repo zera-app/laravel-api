@@ -46,7 +46,7 @@ class MakeServiceCrudTest extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . "\Unit\Repositories";
+        return $rootNamespace . "\Unit\Services";
     }
 
     /**

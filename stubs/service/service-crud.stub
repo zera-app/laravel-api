@@ -3,6 +3,7 @@
 namespace {{ namespace }};
 
 use App\Interfaces\Services\{{ class }}Interface;
+use App\Interfaces\Repositories\{{ model }}RepositoryInterface;
 use App\Services\Base\BaseService;
 use {{ namespacedModel }};
 use Illuminate\Foundation\Http\FormRequest;
@@ -34,7 +35,7 @@ class {{ class }} extends BaseService implements {{ class }}Interface
      */
     public function create(FormRequest $request): void
     {
-         // $this->repository->create($request->validated());
+         $this->repository->create($request->validated());
     }
 
     /**
@@ -42,7 +43,7 @@ class {{ class }} extends BaseService implements {{ class }}Interface
      */
     public function show(string $id): {{ model }}
     {
-         // return $this->repository->show($id);
+         return $this->repository->show($id);
     }
 
     /**
@@ -50,7 +51,7 @@ class {{ class }} extends BaseService implements {{ class }}Interface
      */
     public function update(FormRequest $request, {{ model }} ${{ model }}): void
     {
-        // $this->repository->update($request->validated(), ${{ model }}->id);
+        $this->repository->update($request->validated(), ${{ model }}->id);
     }
 
     /**
@@ -58,6 +59,6 @@ class {{ class }} extends BaseService implements {{ class }}Interface
      */
     public function delete({{ model }} ${{ model }}): void
     {
-         // $this->repository->delete(${{ model }}->id);
+         $this->repository->delete(${{ model }}->id);
     }
 }

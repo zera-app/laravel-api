@@ -129,7 +129,7 @@ class MakeRepositoryCrudInterface extends GeneratorCommand
      */
     protected function getStub()
     {
-        return base_path('stubs/repository/repository-interface.stub');
+        return base_path('stubs/repository/repository-crud-interface.stub');
     }
 
     /**

@@ -18,7 +18,7 @@ interface {{ class }} extends BaseRepositoryInterface
     /**
      * Create a new {{ model }}.
      */
-    public function create({{ model }}Object): {{ model }};
+    public function create({{ model }}Object $data): {{ model }};
     
     /**
      * Find a {{ model }} by using id.
@@ -28,7 +28,7 @@ interface {{ class }} extends BaseRepositoryInterface
     /**
      * Update a {{ model }}.
      */
-    public function update({{ model }}Object, string $id): {{ model }};
+    public function update({{ model }}Object $data, string $id): {{ model }};
 
     /**
      * Delete a {{ model }}.

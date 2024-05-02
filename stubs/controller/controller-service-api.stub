@@ -8,7 +8,7 @@ use {{ namespacedRequests }}
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Interfaces\Services\Controllers\{{ model }}ServiceInterface;
+use App\Interfaces\Services\{{ model }}ServiceInterface;
 
 class {{ class }} extends Controller
 {

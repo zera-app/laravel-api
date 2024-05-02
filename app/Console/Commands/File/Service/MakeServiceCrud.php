@@ -143,7 +143,7 @@ class MakeServiceCrud extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '\Services\Controllers';
+        return $rootNamespace . '\Services';
     }
 
     /**

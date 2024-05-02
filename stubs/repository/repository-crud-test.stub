@@ -69,8 +69,8 @@ it('can create a {{model}}', function () {
     $repository = new {{model}}Repository();
     $data = {{model}}::factory()->make()->toArray();
 
-    // $object = new \App\DataTransferObjects\{{ model }}Object();
-    // $result = $repository->create($object);
+    $object = new \App\DataTransferObjects\{{ model }}Object();
+    $result = $repository->create($object);
 
     expect($result)->toBeInstanceOf({{model}}::class);
     expect($result->name)->toEqual($data['name']);
@@ -84,7 +84,7 @@ it('can update a {{model}}', function () {
     $repository = new {{model}}Repository();
     ${{model}} = {{model}}::factory()->create();
 
-    // $object = new \App\DataTransferObjects\{{ model }}Object();
+    $object = new \App\DataTransferObjects\{{ model }}Object();
     $result = $repository->update($object, ${{model}}->id);
 
     expect($result)->toBeInstanceOf({{model}}::class);

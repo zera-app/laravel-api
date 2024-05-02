@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Requests\{{ storeRequest }};
-use App\Http\Requests\{{ updateRequest }};
+use App\Http\Requests\storeRequest;
+use App\Http\Requests\updateRequest;
 use App\Interfaces\Services\{{model}}ServiceInterface;
 use App\Models\{{model}};
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
